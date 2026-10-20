@@ -1,0 +1,105 @@
+Step 1: Clone your repository
+git clone https://github.com/suvashika-07/vm
+cd vm
+
+Enter vm only once.
+
+Step 2: Install dependencies
+
+Run these commands regardless of whether the packages are already installed.
+
+sudo apt-get update
+sudo apt-get install default-jdk scala python3 python3-pip -y
+
+Check Java:
+
+java -version
+
+Compatibility note: Spark 4.0.1 supports Java 17 or 21 and uses Scala 2.13. The scala package supplied by Ubuntu may be a different version, but Spark's bundled shell is designed to run with its own compatible Scala runtime.
+
+Step 3: Download Spark
+
+We'll use Spark 4.0.1, matching your existing lab run sheet.
+
+wget https://archive.apache.org/dist/spark/spark-4.0.1/spark-4.0.1-bin-hadoop3.tgz
+
+This archive is approximately 524 MB.
+
+Extract it:
+
+tar -xzf spark-4.0.1-bin-hadoop3.tgz
+
+Move it to the installation directory:
+
+sudo mv spark-4.0.1-bin-hadoop3 /usr/local/spark
+Step 4: Configure Spark
+
+Add Spark to your environment:
+
+echo 'export SPARK_HOME=/usr/local/spark' >> ~/.bashrc
+echo 'export PATH=$PATH:$SPARK_HOME/bin' >> ~/.bashrc
+source ~/.bashrc
+
+Verify the installation:
+
+spark-shell --version
+
+If the command displays Spark version information, proceed.
+
+Step 5: Start Spark
+spark-shell
+
+Wait until the Scala prompt appears.
+
+You should see something similar to:
+
+scala>
+Step 6: Execute your program
+
+At the Scala prompt, type:
+
+:load spark_wordcount.scala
+
+This loads and executes the Scala file.
+
+Important: Because the input file is named input.txt and is inside your vm folder, Spark must be able to resolve that file from its working directory. If it reports that the file cannot be found, we'll correct the input path.
+
+Step 7: View the output
+
+Exit Spark:
+
+:quit
+
+Back in the terminal, run:
+
+ls output
+
+You should see output files such as:
+
+_SUCCESS
+part-00000
+
+Display the results:
+
+cat output/part-00000
+
+Expected word counts:
+
+(hello,3)
+(world,2)
+(spark,2)
+Step 8: If you need to run the experiment again
+
+Spark won't overwrite an existing output directory.
+
+From inside your vm directory, remove the previous output:
+
+rm -rf output
+
+Then start Spark and execute the program again:
+
+spark-shell
+
+At the Scala prompt:
+
+:load spark_wordcount.scala
