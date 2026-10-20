@@ -1,0 +1,29 @@
+1. Clone and enter the repository
+
+git clone https://github.com/suvashika-07/vm
+cd vm
+
+2. If asked to implement MPI
+
+Install dependencies:
+
+sudo apt update
+sudo apt install openmpi-bin libopenmpi-dev python3-venv -y
+python3 -m venv ~/mpi-env
+source ~/mpi-env/bin/activate
+pip install mpi4py
+
+Run:
+
+mpirun --oversubscribe -np 2 python mpi_max.py
+
+3. If asked to implement OpenMP
+
+Install dependencies:
+
+sudo apt install g++ libomp-dev -y
+
+Compile and run:
+
+g++ -fopenmp openmp_max.cpp -o openmp_max.out
+./openmp_max.out
