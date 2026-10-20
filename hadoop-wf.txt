@@ -1,0 +1,96 @@
+4. Commands to run the experiment
+
+Run these commands in the Ubuntu terminal.
+
+Step 1: Clone the repository
+git clone https://github.com/suvashika-07/vm
+cd vm
+
+You only need to enter vm once.
+
+Step 2: Install Java and SSH
+sudo apt update
+sudo apt install openjdk-17-jdk ssh rsync -y
+
+Check Java:
+
+java -version
+javac -version
+Step 3: Download Hadoop
+
+We'll use Hadoop 3.4.3 for this procedure.
+
+wget https://dlcdn.apache.org/hadoop/common/hadoop-3.4.3/hadoop-3.4.3.tar.gz
+if doesnt work, try this:
+wget https://downloads.apache.org/hadoop/common/hadoop-3.4.3/hadoop-3.4.3.tar.gz
+
+Extract it:
+
+tar -xzf hadoop-3.4.3.tar.gz
+
+Move into the extracted directory:
+
+cd hadoop-3.4.3
+Step 4: Configure Java for Hadoop
+
+Find the Java installation path:
+
+readlink -f "$(which javac)"
+
+For a typical Ubuntu installation using OpenJDK 17, the Java home directory is:
+
+/usr/lib/jvm/java-17-openjdk-amd64
+
+Open Hadoop's environment file:
+
+nano etc/hadoop/hadoop-env.sh
+
+Add or update this line:
+
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+
+Save using Ctrl + O, press Enter, then exit with Ctrl + X.
+
+Note: Use the actual Java home path if yours differs.
+
+Step 5: Return to your repository
+cd ..
+
+You should now be back inside vm.
+
+Set the Hadoop environment variables:
+
+export HADOOP_HOME="$PWD/hadoop-3.4.3"
+export PATH="$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$PATH"
+
+Verify Hadoop:
+
+hadoop version
+
+You should see Hadoop version information.
+
+Step 6: Compile the Java program
+
+Make sure you're in the vm folder and that WordCount.java is present.
+
+javac -classpath "$(hadoop classpath)" WordCount.java
+
+Create the JAR:
+
+jar cf wordcount.jar WordCount*.class
+Step 7: Run the MapReduce program
+hadoop jar wordcount.jar WordCount input.txt output
+
+Important: Hadoop creates the output directory automatically. If you run the program again, delete the previous output directory first:
+
+rm -rf output
+
+Then rerun the MapReduce command.
+
+Step 8: Display the result
+cat output/part-r-00000
+
+Expected output:
+
+hadoop  2
+hello   3
